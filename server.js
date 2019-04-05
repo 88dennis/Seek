@@ -1,34 +1,32 @@
-//DEPENDENCIES
+// DEPENDENCIES
+// Series of npm packages that we will use to give our server useful functionality
+
 var express = require("express");
-var path = require("path");
 
-// var friendsNow = require("./friends.js");
-// console.log(friends);
-
+// ================================================================================
 //SET UP EXPRESS
+// This sets up the basic properties for our express server
 var app = express();
-var PORT = 3000;
+// Sets an initial port. We"ll use this later in our listener
+var PORT = process.env.PORT || 3000;
 
-// 
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.jason());
+// ================================================================================
+// Sets up the Express app to handle data parsing
+//QUICK PITSTOP
 
-//gets the homepage
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "app/public/home.html"));
-});
 
-app.get("/survey", function(req, res) {
-  res.sendFile(path.join(__dirname, "app/public/survey.html"));
-});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.get("app/data/friends.js", function(req, res) {
-  return res.json(friendsNow.friends);
-});
+// ================================================================================
+// ROUTER
+// The below points our server to a series of "route" files.
+// These routes give our server a "map" of how to respond when users visit or request data from various URLs.
 
-// app.get("/server", function(req, res) {
-//   res.send("Welcome to Blank Page");
-// });
+//MODULIZING
+require("./app/routing/apiRoutes")(app);
+require("./app/routing/htmlRoutes")(app);
+// ================================================================================
 
 // Listener
 // ===========================================================

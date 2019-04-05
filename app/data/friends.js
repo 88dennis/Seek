@@ -1,5 +1,5 @@
 
-var friends = [
+var friendsArray = [
     {
     "name": "Ahmed",
     "photo": "https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAq7AAAAJDAwYzI4NTQ4LWYwZWUtNGFkYS1hNTYwLTZjYzkwY2ViZDA3OA.jpg",
@@ -1333,4 +1333,4 @@ var friends = [
     // console.log(friends);
 // module.exports is essentially an object that we can add data or variables to
 // We can access them from other files using the 'require' keyword.
-    module.exports = friends;
+    module.exports = friendsArray;
