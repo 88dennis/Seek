@@ -28,11 +28,56 @@ module.exports = function(app) {
         // req.body is available since we're using the body parsing middleware
         var newFriendAdded = req.body;
 
-        console.log(newFriendAdded);
-          friendsData.unshift(newFriendAdded);
-          res.json(newFriendAdded);
-          
+        var bothFriendDiffArr = [];
+       // loop through all friends in friendsData
+       for(var i =0; i < friendsData.length; i++){
+           // total difference for each friendsData
+           var totalDiff = 0;
+           // loop through scores and compare newFriend to current friend (roundFriendScores)
+           var compareFriendScores = friendsData[i].scores;
+           for(var j = 0; j < compareFriendScores.length; j++){
+            
+               var searchFriend = parseInt(compareFriendScores[j])
+               var defaultFriend = parseInt(newFriendAdded.scores[j])
+
+               var questionDiff = Math.abs(searchFriend - defaultFriend);
+               totalDiff += questionDiff;
+           }
+           // added to arr for later check
+           bothFriendDiffArr.push(totalDiff);
+       }
+       // function to find the closest friends
+       res.json(closestMatch(bothFriendDiffArr));
+
+       // add last to prevent matching friend with itself
+       friendsData.push(newFriendAdded);
+
+        // console.log(newFriendAdded);
+        //   friendsData.unshift(newFriendAdded);
+        //   res.json(newFriendAdded);
+        friendsData.unshift(newFriendAdded);
       });
+
+      function closestMatch(arr){
+        //find smallest totalDifference
+        var min = Math.min.apply(null, arr);
+        //find indices of the smallest differences
+        var indices = [];
+        var index = arr.indexOf(min);
+        while (index != -1) {
+            indices.push(index);
+            index = arr.indexOf(min, index + 1);
+        }
+        //find each of the closest friend(s)
+        var closestArr = [];
+        for(var i = 0; i < indices.length; i++){
+            var closeIndex = indices[i];
+            closestArr.push(friendsData[closeIndex]);
+        }
+        console.log(closestArr);
+        return closestArr;
+    }
+ };
    
       // ---------------------------------------------------------------------------
       // I added this below code so you could clear out the table while working with the functionality.
@@ -78,4 +123,3 @@ module.exports = function(app) {
     //   res.json({ ok: true });
     // });
     
-  };
